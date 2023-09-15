@@ -10,13 +10,12 @@ const db = require("../db");
  * GET /invoices: queries the db for all invoices, returns their ids and company
  * codes in array
  */
-
+//FIXME: need order by statement and include inputs and outputs in doc strings
 router.get("/", async function (req, res) {
   const results = await db.query(
     `SELECT id, comp_code
       FROM invoices`
-  );
-
+  );//TODO: get rid of the whitespace
   const invoices = results.rows;
 
   return res.json({ invoices });
@@ -33,9 +32,10 @@ router.get("/:id", async function (req, res) {
   const invoiceResults = await db.query(
     `SELECT id, amt, paid, add_date, paid_date, comp_code
       FROM invoices
-      WHERE id=$1`, [id]
+      WHERE id=$1`,
+      [id]//FIXME: keep this on it's own line
   );
-
+  //TODO: get rid of this whitespace
   const invoice = invoiceResults.rows[0];
   if (!invoice) throw new NotFoundError("Invoice not found");
 
@@ -104,7 +104,9 @@ router.delete("/:id", async function (req, res) {
   const id = req.params.id;
 
   const result = await db.query(
-    `DELETE FROM invoices WHERE id = $1 RETURNING id`, [id]);
+    `DELETE FROM invoices WHERE id = $1 RETURNING id`,
+    [id]
+    );
 
   const invoice = result.rows[0];
   if (!invoice) throw new NotFoundError("Invoice not found");
@@ -116,7 +118,7 @@ router.delete("/:id", async function (req, res) {
  * GET /companies/code: Queries the db for a company by its code, returns info
  * about the company, as well as a list of invoice ids for that company
  */
-
+//FIXME: to companies route
 router.get("/companies/:code", async function (req, res) {
   const code = req.params.code;
 
